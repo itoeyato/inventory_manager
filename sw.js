@@ -1,5 +1,5 @@
 // Service worker: la app abre al instante y funciona sin internet.
-const VERSION = "inv-v1.0.1";
+const VERSION = "inv-v1.0.2";
 const CORE = [
   "./", "./index.html", "./manifest.webmanifest", "./styles.css",
   "./app.js", "./store.js", "./ui.js", "./utils.js", "./icons.js",
