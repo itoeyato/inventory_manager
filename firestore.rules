@@ -1,0 +1,38 @@
+rules_version = '2';
+// Reglas de seguridad: solo las personas cuyo correo está en la lista
+// "members" del negocio pueden ver y editar su inventario.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function myEmail() { return request.auth.token.email.lower(); }
+    function negocio(nid) { return get(/databases/$(database)/documents/negocios/$(nid)).data; }
+    function isMember(nid) { return signedIn() && myEmail() in negocio(nid).members; }
+
+    // Cada persona guarda a qué negocio pertenece.
+    match /usuarios/{uid} {
+      allow read, write: if signedIn() && request.auth.uid == uid;
+    }
+
+    match /negocios/{nid} {
+      allow create: if signedIn()
+        && request.resource.data.owner == request.auth.uid
+        && myEmail() in request.resource.data.members;
+      allow read: if isMember(nid);
+      // El dueño puede cambiar todo (incluida la lista de personas).
+      // Los demás miembros solo el nombre y los días de aviso.
+      allow update: if signedIn() && (
+        resource.data.owner == request.auth.uid ||
+        (isMember(nid)
+          && request.resource.data.owner == resource.data.owner
+          && request.resource.data.members == resource.data.members)
+      );
+      allow delete: if signedIn() && resource.data.owner == request.auth.uid;
+
+      // productos, lotes, ventas, actividad
+      match /{coleccion}/{id} {
+        allow read, write: if isMember(nid);
+      }
+    }
+  }
+}
