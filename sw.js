@@ -1,10 +1,10 @@
 // Service worker: la app abre al instante y funciona sin internet.
-const VERSION = "inv-v1.0.0";
+const VERSION = "inv-v1.0.1";
 const CORE = [
-  "./", "./index.html", "./manifest.webmanifest", "./css/styles.css",
-  "./js/app.js", "./js/store.js", "./js/ui.js", "./js/utils.js", "./js/icons.js",
-  "./js/scanner.js", "./js/layers.js", "./js/config.js",
-  "./icons/icon-192.png", "./icons/icon-512.png", "./icons/apple-touch-icon.png", "./icons/icon.svg",
+  "./", "./index.html", "./manifest.webmanifest", "./styles.css",
+  "./app.js", "./store.js", "./ui.js", "./utils.js", "./icons.js",
+  "./scanner.js", "./layers.js", "./config.js",
+  "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png", "./icon.svg",
 ];
 
 self.addEventListener("install", (e) => {
